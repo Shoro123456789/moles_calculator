@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter.font import Font
 from tkinter import ttk
 const = 6.022*(10**23)
+gas = 24
 window=tk.Tk()
 bold_font = Font(family="Helvetica", size=11, weight="bold")
 window.title("Element Calculator")
