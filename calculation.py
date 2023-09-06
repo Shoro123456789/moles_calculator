@@ -1,17 +1,18 @@
 import re
 import tkinter as tk
+import customtkinter as ctk
 from tkinter.font import Font
 from tkinter import ttk
 const = 6.022*(10**23)
 gas = 24
 window=tk.Tk()
-bold_font = Font(family="Helvetica", size=11, weight="bold")
+bold_font = ctk.CTkFont(family="Helvetica", size=13, weight="bold")
 window.title("Element Calculator")
 window.geometry("250x135")
 window.configure(bg="black")
 frame1=tk.Frame(master=window, bg="black")
 frame1.pack()
-calculate_input = tk.Entry(master=frame1, width=30, font=bold_font)
+calculate_input = ctk.CTkEntry(master=frame1, width=180, font=bold_font)
 calculate_input.pack()
 result_history = ""
 
@@ -75,12 +76,12 @@ def history():
     history_text.pack()
 
 
-calculate_button = tk.Button(master=frame1, text="Calculate", command=calculate)
+calculate_button = ctk.CTkButton(master=frame1, text="Calculate", command=calculate, width=15)
 calculate_button.pack()
-info = tk.Button(master=frame1, text="Info", command=info)
+info = ctk.CTkButton(master=frame1, text="Info", command=info, width=15)
 info.pack()
-history = tk.Button(master=frame1, text="History", command=history)
-history.pack()
+history = ctk.CTkButton(master=frame1, text="History", command=history, width=15)
+#history.pack()
 calculate_output_converted = tk.Label(master=frame1, bg="black", fg="white")
 calculate_output = tk.Label(master=frame1, bg="black", fg="white")
 calculate_output_converted.pack()
