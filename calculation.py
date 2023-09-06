@@ -12,7 +12,7 @@ window.geometry("250x135")
 window.configure(bg="black")
 frame1=tk.Frame(master=window, bg="black")
 frame1.pack()
-calculate_input = ctk.CTkEntry(master=frame1, width=180, font=bold_font)
+calculate_input = ctk.CTkEntry(master=frame1, width=220, font=bold_font)
 calculate_input.pack()
 result_history = ""
 
