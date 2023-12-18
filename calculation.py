@@ -15,21 +15,29 @@ class App(ctk.CTk):
         super().__init__()
         start_time = time()
         self.title("Element Calculator")
+        self.geometry("250x50")
+        
+        self.load = loading(master=self)
+        self.load.pack()
+        self.after(1000, self.loaded)
+        self.mainloop()
+        
+    def loaded(self):
+        self.load.destroy()
         self.geometry("250x150")
         self.calc = calculator(master=self)
         self.calc.pack()
-        # self.load = loading(master=self)
-        # self.load.pack()
-        # if (time()-start_time) > 500:
-        #     self.load.destroy()
 
-        self.mainloop()
-
-#class loading(ctk.CTkFrame):
-#    def __init__(self, master):
-#        ctk.CTkFrame.__init__(self, master)
-#        self.label = ctk.CTkLabel(self, text="Loading...")
-#        self.label.pack()
+class loading(ctk.CTkFrame):
+   def __init__(self, master):
+       ctk.CTkFrame.__init__(self, master)
+       self.label = ctk.CTkLabel(self, text="Loading...")
+       self.label.pack()
+       self.progress = ctk.CTkProgressBar(self, orientation="horizontal")
+       self.progress.configure(mode="determinate", determinate_speed=1.4)
+       self.progress.set(0)
+       self.progress.start()
+       self.progress.pack()
 class calculator(ctk.CTkFrame): 
     def __init__(self,master):
         ctk.CTkFrame.__init__(self, master)
