@@ -3,23 +3,37 @@ import customtkinter as ctk
 from tkinter.font import Font
 from tkinter import ttk
 from tkinter import StringVar
-from time import sleep
-
+from os import *
+from time import *
 
 const = 6.022*(10**23)
 gas = 24
 
 
-
-class elm(ctk.CTk): 
+class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        bold_font = ctk.CTkFont(family="Helvetica", size=13, weight="bold")
-        self.title("Element Calculator")
-        self.geometry("250x100")
-        sleep(2)
+        start_time = time()
         self.title("Element Calculator")
         self.geometry("250x150")
+        self.calc = calculator(master=self)
+        self.calc.pack()
+        # self.load = loading(master=self)
+        # self.load.pack()
+        # if (time()-start_time) > 500:
+        #     self.load.destroy()
+
+        self.mainloop()
+
+#class loading(ctk.CTkFrame):
+#    def __init__(self, master):
+#        ctk.CTkFrame.__init__(self, master)
+#        self.label = ctk.CTkLabel(self, text="Loading...")
+#        self.label.pack()
+class calculator(ctk.CTkFrame): 
+    def __init__(self,master):
+        ctk.CTkFrame.__init__(self, master)
+        bold_font = ctk.CTkFont(family="Helvetica", size=13, weight="bold")
 
 
         self.frame1= ctk.CTkFrame(master=self)
@@ -48,49 +62,52 @@ class elm(ctk.CTk):
 
         self.calculate_output_converted.pack()
         self.calculate_output.pack()
-        self.mainloop()
 
     """
     This function calculates the output of the 
     checmical formula provided by the user.
     """
     def calculate(self):
-        self.element = self.elm_input
-        print("working")
-        print(self.element)
-        self.element = re.sub(r" ", r"", self.element.get())
-        self.element = re.sub(r"(\d+(\.\d+)?)(g)", r"(\1*1)", self.element)
-        self.element = re.sub(r"(\d+(\.\d+)?)(mg)", r"(\1*0.001)", self.element)
-        self.element = re.sub(r"(\d+(\.\d+)?)(Kg)", r"(\1*1000)", self.element, flags=re.IGNORECASE)
-        self.element = re.sub(r"(\d+(\.\d+)?)(Tonnes)", r"(\1*1000000)", self.element, flags=re.IGNORECASE)
-        self.element = re.sub(r"(\d+(\.\d+)?)(dm3)", r"(\1*1)", self.element)
-        self.element = re.sub(r"(\d+(\.\d+)?)(cm3)", r"(\1*0.001)", self.element)
-        self.element = re.sub(r"(\d+(\.\d+)?)(mm3)", r"(\1*0.000001)", self.element)
-        self.element = re.sub(r"(\d+(\.\d+)?)(mol/dm3)", r"(\1*1)", self.element)
-        self.element = re.sub(r"(\d+(\.\d+)?)(%)", r"(\1*0.01)", self.element)
+        try:
+            self.element = self.elm_input
+            print("working")
+            print(self.element)
+            self.element = re.sub(r" ", r"", self.element.get())
+            self.element = re.sub(r"(\d+(\.\d+)?)(g)", r"(\1*1)", self.element)
+            self.element = re.sub(r"(\d+(\.\d+)?)(mg)", r"(\1*0.001)", self.element)
+            self.element = re.sub(r"(\d+(\.\d+)?)(Kg)", r"(\1*1000)", self.element, flags=re.IGNORECASE)
+            self.element = re.sub(r"(\d+(\.\d+)?)(Tonnes)", r"(\1*1000000)", self.element, flags=re.IGNORECASE)
+            self.element = re.sub(r"(\d+(\.\d+)?)(dm3)", r"(\1*1)", self.element)
+            self.element = re.sub(r"(\d+(\.\d+)?)(cm3)", r"(\1*0.001)", self.element)
+            self.element = re.sub(r"(\d+(\.\d+)?)(mm3)", r"(\1*0.000001)", self.element)
+            self.element = re.sub(r"(\d+(\.\d+)?)(mol/dm3)", r"(\1*1)", self.element)
+            self.element = re.sub(r"(\d+(\.\d+)?)(%)", r"(\1*0.01)", self.element)
 
-        
-        self.element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(\((.*?)\))", r"\1+\2", self.element)    
-        print(self.element)    
-        self.element = re.sub(r"(\d+(\.\d+)?)\((.*?)\)", r"\1*(\3)", self.element) 
-        print(self.element)
-        self.element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(?=[A-Z])", r"\1+", self.element)
-        print(self.element)
-        #self.element = re.sub(r"([a-z])([A-Z])", r"\1+\2", self.element)
-        #print(self.element)   
-        #self.element = re.sub(r"([A-Z])([A-Z])", r"\1+\2", self.element)  
-        #print(self.element)
-        self.element = re.sub(r"([A-Z][a-z]?)(\d+)", r"(\1*\2)", self.element)
-        print(self.element)
-        self.element = re.sub(r"(\)(\d+)?)([A-Z])", r"\1+\2", self.element)
-        print(self.element)
-        self.element = re.sub(r"(\))(\d+)", r"\1*\2", self.element)
+            
+            self.element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(\((.*?)\))", r"\1+\2", self.element)    
+            print(self.element)    
+            self.element = re.sub(r"(\d+(\.\d+)?)\((.*?)\)", r"\1*(\3)", self.element) 
+            print(self.element)
+            self.element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(?=[A-Z])", r"\1+", self.element)
+            print(self.element)
+            #self.element = re.sub(r"([a-z])([A-Z])", r"\1+\2", self.element)
+            #print(self.element)   
+            #self.element = re.sub(r"([A-Z])([A-Z])", r"\1+\2", self.element)  
+            #print(self.element)
+            self.element = re.sub(r"([A-Z][a-z]?)(\d+)", r"(\1*\2)", self.element)
+            print(self.element)
+            self.element = re.sub(r"(\)(\d+)?)([A-Z])", r"\1+\2", self.element)
+            print(self.element)
+            self.element = re.sub(r"(\))(\d+)", r"\1*\2", self.element)
 
-        print(self.element)
-        output2=self.element
-        output1=eval(self.element)
-        self.calculate_output_converted.configure(text=output2)
-        self.calculate_output.configure(text=output1)
+            print(self.element)
+            output2=self.element
+            output1=eval(self.element)
+            self.calculate_output_converted.configure(text=output2)
+            self.calculate_output.configure(text=output1)
+        except:
+            self.calculate_output_converted.configure(text="Invalid Input")
+            self.calculate_output.configure(text="")
 
     def info(self):
         """
@@ -238,4 +255,4 @@ Lv = 293
 Ts = 294
 Og = 294
 
-app = elm()
+app = App()
