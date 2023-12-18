@@ -1,91 +1,130 @@
 import re
-import tkinter as tk
 import customtkinter as ctk
 from tkinter.font import Font
 from tkinter import ttk
+from tkinter import StringVar
+from time import sleep
+
+
 const = 6.022*(10**23)
 gas = 24
-window=tk.Tk()
-bold_font = ctk.CTkFont(family="Helvetica", size=13, weight="bold")
-window.title("Element Calculator")
-window.geometry("250x135")
-window.configure(bg="black")
-frame1=tk.Frame(master=window, bg="black")
-frame1.pack()
-calculate_input = ctk.CTkEntry(master=frame1, width=220, font=bold_font)
-calculate_input.pack()
-result_history = ""
-
-"""
-This function calculates the output of the 
-checmical formula provided by the user.
-"""
-def calculate():
-    element = calculate_input.get()
-    element = re.sub(r" ", r"", element)
-    element = re.sub(r"(\d+(\.\d+)?)(g)", r"(\1*1)", element)
-    element = re.sub(r"(\d+(\.\d+)?)(mg)", r"(\1*0.001)", element)
-    element = re.sub(r"(\d+(\.\d+)?)(Kg)", r"(\1*1000)", element, flags=re.IGNORECASE)
-    element = re.sub(r"(\d+(\.\d+)?)(Tonnes)", r"(\1*1000000)", element, flags=re.IGNORECASE)
-    element = re.sub(r"(\d+(\.\d+)?)(dm3)", r"(\1*1)", element)
-    element = re.sub(r"(\d+(\.\d+)?)(cm3)", r"(\1*0.001)", element)
-    element = re.sub(r"(\d+(\.\d+)?)(mm3)", r"(\1*0.000001)", element)
-    element = re.sub(r"(\d+(\.\d+)?)(mol/dm3)", r"(\1*1)", element)
-    element = re.sub(r"(\d+(\.\d+)?)(%)", r"(\1*0.01)", element)
-
-    
-    element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(\((.*?)\))", r"\1+\2", element)    
-    print(element)    
-    element = re.sub(r"(\d+(\.\d+)?)\((.*?)\)", r"\1*(\3)", element) 
-    print(element)
-    element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(?=[A-Z])", r"\1+", element)
-    print(element)
-    #element = re.sub(r"([a-z])([A-Z])", r"\1+\2", element)
-    #print(element)   
-    #element = re.sub(r"([A-Z])([A-Z])", r"\1+\2", element)  
-    #print(element)
-    element = re.sub(r"([A-Z][a-z]?)(\d+)", r"(\1*\2)", element)
-    print(element)
-    element = re.sub(r"(\)(\d+)?)([A-Z])", r"\1+\2", element)
-    print(element)
-    element = re.sub(r"(\))(\d+)", r"\1*\2", element)
-
-    print(element)
-    output2=element
-    output1=eval(element)
-    calculate_output_converted.config(text=output2)
-    calculate_output.config(text=output1)
-    result_history += output2 + "=" + str(output1) + "\n"
-def info():
-    info_window = tk.Tk()
-    info_window.title("Info")
-    info_window.geometry("800x500")
-    info_window.configure(bg="black")
-    info_window_frame=tk.Frame(master=info_window, bg="black")
-    info_window_frame.pack()
-    info_text = tk.Label(master=info_window_frame, text="this is a mole calculator so inputted elements are their mass numbers (example: H2 is actually gonna be percieved as 2 as hydrogens mass number is 1)" + "\n" + "\n" +  "Rules: firstly you should enter the element, then press the calculate button." + "\n" + "\n" + "Example: H2, then press the calculate button." + "\n" + "\n" + "Secondly, you should have the element's chemical symbol correctly(example: NaCl and not nacl)" + "\n" + "\n" + "Thirdly, if there is more than one moles of a compound then input it like this (example: 5*(H2O))" + "\n" + "\n" + "You can write the word -const- to multiply the mass number by avagadros constant/6.022*(10**23)", bg="black", fg="white")
-    info_text.pack()
-def history():
-    history_window = tk.Tk()
-    history_window.title("History")
-    history_window.geometry("800x500")
-    history_window.configure(bg="black")
-    history_window_frame=tk.Frame(master=history_window, bg="black")
-    history_window_frame.pack()
-    history_text = tk.Label(master=history_window_frame, text=result_history, bg="black", fg="white")
-    history_text.pack()
 
 
-calculate_button = ctk.CTkButton(master=frame1, text="Calculate", command=calculate, width=15)
-calculate_button.pack()
-info = ctk.CTkButton(master=frame1, text="Info", command=info, width=15)
-info.pack()
-history = ctk.CTkButton(master=frame1, text="History", command=history, width=15)
-#history.pack()
-calculate_output_converted = tk.Label(master=frame1, bg="black", fg="white")
-calculate_output = tk.Label(master=frame1, bg="black", fg="white")
-calculate_output_converted.pack()
-calculate_output.pack()
+
+class elm(ctk.CTk): 
+    def __init__(self):
+        super().__init__()
+        bold_font = ctk.CTkFont(family="Helvetica", size=13, weight="bold")
+        self.title("Element Calculator")
+        self.geometry("250x100")
+        sleep(2)
+        self.title("Element Calculator")
+        self.geometry("250x150")
+
+
+        self.frame1= ctk.CTkFrame(master=self)
+        self.frame1.pack()
+
+        self.tabs = ctk.CTkTabview(master=self.frame1, height=80, anchor="w")
+        self.tabs.pack()
+        self.tabs.add("Calculation")
+        self.tabs.add("info")
+
+        self.elm_input = StringVar()
+        self.calculate_input = ctk.CTkEntry(master=self.tabs.tab("Calculation"), width=220, font=bold_font, placeholder_text="Enter Element", textvariable=self.elm_input)
+
+        self.calculate_input.pack()
+
+        self.calculate_output_converted = ctk.CTkLabel(master=self.tabs.tab("Calculation"), text="")
+        self.calculate_output = ctk.CTkLabel(master=self.tabs.tab("Calculation"), text="")
+        self.calculate_button = ctk.CTkButton(master=self.tabs.tab("Calculation"), text="Calculate", command=self.calculate, width=15)
+        self.calculate_button.pack()
+        info_text = ctk.CTkLabel(master=self.tabs.tab("info"), text="this is a mole calculator so inputted elements are their mass numbers (example: H2 is actually gonna be percieved as 2 as hydrogens mass number is 1)" + "\n" + "\n" +  "Rules: firstly you should enter the elm.element, then press the calculate button." + "\n" + "\n" + "Example: H2, then press the calculate button." + "\n" + "\n" + "Secondly, you should have the elm.element's chemical symbol correctly(example: NaCl and not nacl)" + "\n" + "\n" + "Thirdly, if there is more than one moles of a compound then input it like this (example: 5*(H2O))" + "\n" + "\n" + "You can write the word -const- to multiply the mass number by avagadros constant/6.022*(10**23)")
+        info_text.pack()
+#        self.info = ctk.CTkButton(master=self.frame1, text="Info", command=self.info, width=15)
+#        self.info.pack()
+        history = ctk.CTkButton(master=self.frame1, text="History", command=self.history, width=15)
+        #history.pack()
+
+        self.calculate_output_converted.pack()
+        self.calculate_output.pack()
+        self.mainloop()
+
+    """
+    This function calculates the output of the 
+    checmical formula provided by the user.
+    """
+    def calculate(self):
+        self.element = self.elm_input
+        print("working")
+        print(self.element)
+        self.element = re.sub(r" ", r"", self.element.get())
+        self.element = re.sub(r"(\d+(\.\d+)?)(g)", r"(\1*1)", self.element)
+        self.element = re.sub(r"(\d+(\.\d+)?)(mg)", r"(\1*0.001)", self.element)
+        self.element = re.sub(r"(\d+(\.\d+)?)(Kg)", r"(\1*1000)", self.element, flags=re.IGNORECASE)
+        self.element = re.sub(r"(\d+(\.\d+)?)(Tonnes)", r"(\1*1000000)", self.element, flags=re.IGNORECASE)
+        self.element = re.sub(r"(\d+(\.\d+)?)(dm3)", r"(\1*1)", self.element)
+        self.element = re.sub(r"(\d+(\.\d+)?)(cm3)", r"(\1*0.001)", self.element)
+        self.element = re.sub(r"(\d+(\.\d+)?)(mm3)", r"(\1*0.000001)", self.element)
+        self.element = re.sub(r"(\d+(\.\d+)?)(mol/dm3)", r"(\1*1)", self.element)
+        self.element = re.sub(r"(\d+(\.\d+)?)(%)", r"(\1*0.01)", self.element)
+
+        
+        self.element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(\((.*?)\))", r"\1+\2", self.element)    
+        print(self.element)    
+        self.element = re.sub(r"(\d+(\.\d+)?)\((.*?)\)", r"\1*(\3)", self.element) 
+        print(self.element)
+        self.element = re.sub(r"([A-Z][a-z]?\d*(?:\.\d+)?)(?=[A-Z])", r"\1+", self.element)
+        print(self.element)
+        #self.element = re.sub(r"([a-z])([A-Z])", r"\1+\2", self.element)
+        #print(self.element)   
+        #self.element = re.sub(r"([A-Z])([A-Z])", r"\1+\2", self.element)  
+        #print(self.element)
+        self.element = re.sub(r"([A-Z][a-z]?)(\d+)", r"(\1*\2)", self.element)
+        print(self.element)
+        self.element = re.sub(r"(\)(\d+)?)([A-Z])", r"\1+\2", self.element)
+        print(self.element)
+        self.element = re.sub(r"(\))(\d+)", r"\1*\2", self.element)
+
+        print(self.element)
+        output2=self.element
+        output1=eval(self.element)
+        self.calculate_output_converted.configure(text=output2)
+        self.calculate_output.configure(text=output1)
+
+    def info(self):
+        """
+        Creates an information window with details about the mole calculator.
+
+        This function creates a new window using the `ctk.CTk` class and sets the title to "Info".
+        The window size is set to 800x500 pixels. It then creates a frame within the window using
+        the `ctk.CTkFrame` class and packs it. 
+
+        Inside the frame, a label is created using the `ctk.CTkLabel` class. The label displays 
+        information about the mole calculator, including instructions for inputting elements, 
+        rules for using the calculator, and examples. The label is packed inside the frame.
+
+        This function does not take any parameters and does not return any values.
+        """
+        info_window = ctk.CTk()
+        info_window.title("Info")
+        info_window.geometry("800x500")
+        info_window_frame=ctk.CTkFrame(master=info_window)
+        info_window_frame.pack()
+        info_text = ctk.CTkLabel(master=info_window_frame, text="this is a mole calculator so inputted elements are their mass numbers (example: H2 is actually gonna be percieved as 2 as hydrogens mass number is 1)" + "\n" + "\n" +  "Rules: firstly you should enter the elm.element, then press the calculate button." + "\n" + "\n" + "Example: H2, then press the calculate button." + "\n" + "\n" + "Secondly, you should have the elm.element's chemical symbol correctly(example: NaCl and not nacl)" + "\n" + "\n" + "Thirdly, if there is more than one moles of a compound then input it like this (example: 5*(H2O))" + "\n" + "\n" + "You can write the word -const- to multiply the mass number by avagadros constant/6.022*(10**23)")
+        info_text.pack()
+    def history(self):
+        history_window = ctk.CTk()
+        history_window.title("History")
+        history_window.geometry("800x500")
+        history_window.configure(bg="black")
+        history_window_frame=ctk.CTkFrame(master=history_window, bg="black")
+        history_window_frame.pack()
+        history_text = ctk.CTkLabel(master=history_window_frame, text=result_history)
+        history_text.pack()
+
+
+
 H = 1
 He = 4
 Li = 7
@@ -199,5 +238,4 @@ Lv = 293
 Ts = 294
 Og = 294
 
-
-window.mainloop()
+app = elm()
