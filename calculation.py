@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter import StringVar
 from os import *
 from time import *
+from PIL import Image
 
 const = 6.022*(10**23)
 gas = 24
@@ -51,6 +52,7 @@ class calculator(ctk.CTkFrame):
         self.tabs.pack()
         self.tabs.add("Calculation")
         self.tabs.add("info")
+        self.tabs.add("Settings")
 
         self.elm_input = StringVar()
         self.calculate_input = ctk.CTkEntry(master=self.tabs.tab("Calculation"), width=220, font=bold_font, placeholder_text="Enter Element", textvariable=self.elm_input)
@@ -61,14 +63,28 @@ class calculator(ctk.CTkFrame):
         self.calculate_output = ctk.CTkLabel(master=self.tabs.tab("Calculation"), text="")
         self.calculate_button = ctk.CTkButton(master=self.tabs.tab("Calculation"), text="Calculate", command=self.calculate, width=15, fg_color="purple", hover_color="#6c087a")
         self.calculate_button.pack()
+        self.switch_var = ctk.StringVar(value=False)
+
+
         self.textframe = ctk.CTkScrollableFrame(master=self.tabs.tab("info"), height=100, width=220)
         self.textframe.pack()
         info_text = ctk.CTkLabel(master=self.textframe, wraplength=200,text="this is a mole calculator so inputted elements are their mass numbers (example: H2 is actually gonna be percieved as 2 as hydrogens mass number is 1)" + "\n" + "\n" +  "Rules: firstly you should enter the elm.element, then press the calculate button." + "\n" + "\n" + "Example: H2, then press the calculate button." + "\n" + "\n" + "Secondly, you should have the elm.element's chemical symbol correctly(example: NaCl and not nacl)" + "\n" + "\n" + "Thirdly, if there is more than one moles of a compound then input it like this (example: 5*(H2O))" + "\n" + "\n" + "You can write the word -const- to multiply the mass number by avagadros constant/6.022*(10**23)")
         info_text.pack()
+
+        self.settingsframe = ctk.CTkScrollableFrame(master=self.tabs.tab("Settings"), height=100, width=220)
+        self.settingsframe.pack()
+        self.settings_image=ctk.CTkImage(dark_image=Image.open("images/setting (1).png"))
+        self.setting_img_label = ctk.CTkLabel(master=self.settingsframe, text="", font=bold_font, image=self.settings_image, anchor="w")
+        self.setting_img_label.pack()
+        self.AOTswitch = ctk.CTkSwitch(master=self.settingsframe, text="Always on top", variable=self.switch_var, command=self.AOT, onvalue="True", offvalue="False")
+        self.AOTswitch.pack()        
+
 #        self.info = ctk.CTkButton(master=self.frame1, text="Info", command=self.info, width=15)
 #        self.info.pack()
         history = ctk.CTkButton(master=self.frame1, text="History", command=self.history, width=15)
         #history.pack()
+
+
 
         self.calculate_output_converted.pack()
         self.calculate_output.pack()
@@ -149,6 +165,13 @@ class calculator(ctk.CTkFrame):
         history_window_frame.pack()
         history_text = ctk.CTkLabel(master=history_window_frame, text=result_history)
         history_text.pack()
+    def AOT(self):
+        self.setting_switch = self.AOTswitch.get()
+        if self.setting_switch == "True":
+            self.master.attributes("-topmost", True)
+        elif self.setting_switch == "False":
+            self.master.attributes("-topmost", False)
+            
 
 
 
