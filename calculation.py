@@ -31,10 +31,10 @@ class App(ctk.CTk):
 class loading(ctk.CTkFrame):
    def __init__(self, master):
        ctk.CTkFrame.__init__(self, master)
-       self.label = ctk.CTkLabel(self, text="Loading...")
+       self.label = ctk.CTkLabel(self, text="Loading...", text_color="green")
        self.label.pack()
        self.progress = ctk.CTkProgressBar(self, orientation="horizontal")
-       self.progress.configure(mode="determinate", determinate_speed=1.4)
+       self.progress.configure(mode="determinate", determinate_speed=1.4, progress_color="purple")
        self.progress.set(0)
        self.progress.start()
        self.progress.pack()
@@ -47,7 +47,7 @@ class calculator(ctk.CTkFrame):
         self.frame1= ctk.CTkFrame(master=self)
         self.frame1.pack()
 
-        self.tabs = ctk.CTkTabview(master=self.frame1, height=80, anchor="w")
+        self.tabs = ctk.CTkTabview(master=self.frame1, height=80, anchor="w",segmented_button_selected_color="purple", segmented_button_selected_hover_color="#6c087a")
         self.tabs.pack()
         self.tabs.add("Calculation")
         self.tabs.add("info")
@@ -59,7 +59,7 @@ class calculator(ctk.CTkFrame):
 
         self.calculate_output_converted = ctk.CTkLabel(master=self.tabs.tab("Calculation"), text="")
         self.calculate_output = ctk.CTkLabel(master=self.tabs.tab("Calculation"), text="")
-        self.calculate_button = ctk.CTkButton(master=self.tabs.tab("Calculation"), text="Calculate", command=self.calculate, width=15)
+        self.calculate_button = ctk.CTkButton(master=self.tabs.tab("Calculation"), text="Calculate", command=self.calculate, width=15, fg_color="purple", hover_color="#6c087a")
         self.calculate_button.pack()
         self.textframe = ctk.CTkScrollableFrame(master=self.tabs.tab("info"), height=100, width=220)
         self.textframe.pack()
